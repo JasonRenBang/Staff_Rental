@@ -134,6 +134,7 @@ export default function Products() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
+              <TableHead>Description</TableHead>
               <TableHead>SKU</TableHead>
               <TableHead>Store</TableHead>
               <TableHead>Status</TableHead>
@@ -144,7 +145,7 @@ export default function Products() {
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                   No products found
                 </TableCell>
               </TableRow>
@@ -155,6 +156,7 @@ export default function Products() {
                   className={lastActionProductId === product.id ? 'bg-accent' : ''}
                 >
                   <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>{product.description}</TableCell>
                   <TableCell>{product.sku}</TableCell>
                   <TableCell>{product.storeLocation}</TableCell>
                   <TableCell>
