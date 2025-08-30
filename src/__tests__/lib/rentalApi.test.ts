@@ -97,6 +97,9 @@ describe('Rental API', () => {
           exists: () => true,
           data: () => ({ status: 'Rented' })
         }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
       mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)

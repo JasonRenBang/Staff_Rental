@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { createProduct, updateProduct, deleteProduct } from '@/lib/productApi'
 import type { CreateProductInput } from '@/types/product'
