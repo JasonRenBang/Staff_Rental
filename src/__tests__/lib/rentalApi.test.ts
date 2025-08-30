@@ -118,7 +118,7 @@ describe('Rental API', () => {
       mockGetDocs.mockResolvedValue({
         empty: false,
         docs: [{ id: 'rental-id', ref: {} }]
-      } as { empty: boolean; docs: Array<{ id: string; ref: any }> })
+      } as { empty: boolean; docs: Array<{ id: string; ref: object }> })
       
       mockRunTransaction.mockImplementation((db, callback) => 
         callback(mockTransaction)
@@ -144,7 +144,7 @@ describe('Rental API', () => {
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: any[] })
+      } as { empty: boolean; docs: object[] })
       
       mockRunTransaction.mockImplementation((db, callback) => 
         callback(mockTransaction)
@@ -168,7 +168,7 @@ describe('Rental API', () => {
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: any[] })
+      } as { empty: boolean; docs: object[] })
       
       mockRunTransaction.mockImplementation((db, callback) => 
         callback(mockTransaction)
@@ -192,7 +192,7 @@ describe('Rental API', () => {
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: any[] })
+      } as { empty: boolean; docs: object[] })
       
       mockRunTransaction.mockImplementation((db, callback) => 
         callback(mockTransaction)
