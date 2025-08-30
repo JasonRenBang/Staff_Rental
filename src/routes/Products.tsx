@@ -116,7 +116,7 @@ export default function Products() {
 
       {/* Filter */}
       <div className="mb-4">
-        <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
+        <Select value={filterStatus} onValueChange={(value: 'All' | 'Available' | 'Rented') => setFilterStatus(value)}>
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>

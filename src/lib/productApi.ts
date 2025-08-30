@@ -1,17 +1,11 @@
 import { 
     collection, 
     doc, 
-    addDoc, 
     updateDoc, 
-    deleteDoc, 
-    getDocs, 
-    getDoc,
     query, 
-    where, 
     orderBy, 
     onSnapshot,
-    runTransaction,
-    Timestamp 
+    runTransaction
   } from 'firebase/firestore'
   import { db } from './firebase'
   import type { Product, CreateProductInput, SerialIndex } from '@/types/product'

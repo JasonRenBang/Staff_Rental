@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatDate, isOverdue, isDueSoon, getCurrentDate } from '@/utils/dates'
+import { formatDate, isOverdue, isDueSoon } from '@/utils/dates'
 
 describe('Date Utils', () => {
   describe('formatDate', () => {
