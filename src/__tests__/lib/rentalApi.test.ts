@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { bookOutProduct, checkInProduct } from '@/lib/rentalApi'
 import type { CreateRentalInput } from '@/types/rental'
@@ -56,8 +57,9 @@ describe('Rental API', () => {
         }),
         set: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction).then(() => 'test-rental-id')
       )
 
@@ -75,8 +77,11 @@ describe('Rental API', () => {
         get: vi.fn().mockResolvedValue({
           exists: () => false
         }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -93,7 +98,7 @@ describe('Rental API', () => {
           data: () => ({ status: 'Rented' })
         }),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -112,15 +117,17 @@ describe('Rental API', () => {
           exists: () => true,
           data: () => ({ status: 'Rented' })
         }),
+        set: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       }
       
       mockGetDocs.mockResolvedValue({
         empty: false,
         docs: [{ id: 'rental-id', ref: {} }]
-      } as { empty: boolean; docs: Array<{ id: string; ref: object }> })
+      } as any)
       
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -138,15 +145,17 @@ describe('Rental API', () => {
           exists: () => true,
           data: () => ({ status: 'Rented' })
         }),
+        set: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       }
       
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: object[] })
+      } as any)
       
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -163,14 +172,17 @@ describe('Rental API', () => {
         get: vi.fn().mockResolvedValue({
           exists: () => false
         }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
       
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: object[] })
+      } as any)
       
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -187,14 +199,17 @@ describe('Rental API', () => {
           exists: () => true,
           data: () => ({ status: 'Available' })
         }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
       
       mockGetDocs.mockResolvedValue({
         empty: true,
         docs: []
-      } as { empty: boolean; docs: object[] })
+      } as any)
       
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 

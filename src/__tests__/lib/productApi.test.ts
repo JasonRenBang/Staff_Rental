@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { createProduct, updateProduct, deleteProduct } from '@/lib/productApi'
 import type { CreateProductInput } from '@/types/product'
@@ -47,8 +48,10 @@ describe('Product API', () => {
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => false }),
         set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction).then(() => 'test-product-id')
       )
 
@@ -63,8 +66,11 @@ describe('Product API', () => {
       
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => true }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -78,9 +84,12 @@ describe('Product API', () => {
       const mockRunTransaction = vi.mocked(runTransaction)
       
       const mockTransaction = {
+        get: vi.fn(),
+        set: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -94,11 +103,11 @@ describe('Product API', () => {
       
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => false }),
-        delete: vi.fn(),
         set: vi.fn(),
         update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -116,8 +125,11 @@ describe('Product API', () => {
       
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => true }),
+        set: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
@@ -132,9 +144,12 @@ describe('Product API', () => {
       const mockRunTransaction = vi.mocked(runTransaction)
       
       const mockTransaction = {
+        get: vi.fn(),
+        set: vi.fn(),
+        update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) => 
         callback(mockTransaction)
       )
 
