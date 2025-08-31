@@ -2,6 +2,17 @@
 
 A modern, full-stack web application for managing staff product rentals in retail environments. Built with React 19, TypeScript, and Firebase, featuring real-time data synchronization, user authentication, and automated CI/CD deployment.
 
+**[Live Demo](https://staff-product-rental-tracker.web.app/)**
+
+## 🧪 Demo Account
+
+You can test the application using this demo account:
+
+**Email:** `test1@gmail.com`  
+**Password:** `123456789`
+
+_Note: This is a shared demo account for testing purposes only._
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -62,6 +73,23 @@ npm run test:ui           # Run tests with UI dashboard
 # Build & Deploy
 npm run build             # Build for production
 npm run preview           # Preview production build locally
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── ui/              # shadcn/ui components
+│   ├── products/        # Product-related components
+│   ├── booking/         # Booking-related components
+│   └── profile/         # Profile-related components
+├── routes/              # Page components
+├── lib/                 # API and utility functions
+├── store/               # Zustand state management
+├── types/               # TypeScript type definitions
+├── utils/               # Helper functions
+└── __tests__/           # Test files
 ```
 
 ## 🌟 Features
