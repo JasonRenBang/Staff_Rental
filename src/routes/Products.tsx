@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react'
-import { Plus, Edit, Trash2, UserPlus, UserCheck } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import type { Product } from '@/types/product'
 import { subscribeToProducts, deleteProduct } from '@/lib/productApi'
 import { checkInProduct } from '@/lib/rentalApi'
 import { useUiStore } from '@/store/uiStore'
-import { formatDate, isOverdue, isDueSoon } from '@/utils/dates'
 import CreateProductForm from '@/components/CreateProductForm'
+import ProductTable from '@/components/products/ProductTable'
+import DeleteProductDialog from '@/components/products/DeleteProductDialog'
 import { useNavigate } from 'react-router-dom'
 
 export default function Products() {
@@ -21,6 +20,7 @@ export default function Products() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
+  const [isDeleting, setIsDeleting] = useState(false)
   const { 
     filterStatus, 
     setFilterStatus, 
@@ -76,6 +76,7 @@ export default function Products() {
   const confirmDeleteProduct = async () => {
     if (!productToDelete) return
     
+    setIsDeleting(true)
     try {
       await deleteProduct(productToDelete.id, productToDelete.serialNumber)
       toast.success('Product deleted successfully')
@@ -83,15 +84,9 @@ export default function Products() {
       setProductToDelete(null)
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to delete product')
+    } finally {
+      setIsDeleting(false)
     }
-  }
-
-  // Get status badge variant
-  const getStatusBadgeVariant = (product: Product) => {
-    if (product.status === 'Available') return 'secondary'
-    if (product.currentDueDate && isOverdue(product.currentDueDate)) return 'destructive'
-    if (product.currentDueDate && isDueSoon(product.currentDueDate)) return 'outline'
-    return 'default'
   }
 
   return (
@@ -129,97 +124,14 @@ export default function Products() {
       </div>
 
       {/* Products Table */}
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>SKU</TableHead>
-              <TableHead>Store</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Renter & Due</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredProducts.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                  No products found
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredProducts.map((product) => (
-                <TableRow 
-                  key={product.id}
-                  className={lastActionProductId === product.id ? 'bg-accent' : ''}
-                >
-                  <TableCell className="font-medium">{product.name}</TableCell>
-                  <TableCell>{product.description}</TableCell>
-                  <TableCell>{product.sku}</TableCell>
-                  <TableCell>{product.storeLocation}</TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusBadgeVariant(product)}>
-                      {product.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {product.status === 'Rented' && product.currentRenterName && (
-                      <div className="text-sm">
-                        <div>{product.currentRenterName}</div>
-                        <div className="text-muted-foreground">
-                          Due: {product.currentDueDate && formatDate(product.currentDueDate)}
-                        </div>
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2">
-                      {product.status === 'Available' ? (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleBookOut(product.id)}
-                          >
-                            <UserPlus className="h-4 w-4 mr-1" />
-                            Book Out
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleEditProduct(product)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleDeleteProduct(product)}
-                            className="text-destructive hover:text-destructive"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleCheckIn(product.id)}
-                        >
-                          <UserCheck className="h-4 w-4 mr-1" />
-                          Check In
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <ProductTable
+        products={filteredProducts}
+        lastActionProductId={lastActionProductId}
+        onCheckIn={handleCheckIn}
+        onBookOut={handleBookOut}
+        onEdit={handleEditProduct}
+        onDelete={handleDeleteProduct}
+      />
 
       {/* Edit Product Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -240,40 +152,13 @@ export default function Products() {
       </Dialog>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Product</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <p>Are you sure you want to delete this product?</p>
-            {productToDelete && (
-              <div className="p-4 bg-muted rounded-lg">
-                <p className="font-medium">{productToDelete.name}</p>
-                <p className="text-sm text-muted-foreground">SKU: {productToDelete.sku}</p>
-                <p className="text-sm text-muted-foreground">Serial: {productToDelete.serialNumber}</p>
-              </div>
-            )}
-            <p className="text-sm text-destructive">
-              This action cannot be undone.
-            </p>
-            <div className="flex justify-end space-x-2">
-              <Button 
-                variant="outline" 
-                onClick={() => setIsDeleteDialogOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button 
-                variant="destructive" 
-                onClick={confirmDeleteProduct}
-              >
-                Delete Product
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <DeleteProductDialog
+        isOpen={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        product={productToDelete}
+        onConfirm={confirmDeleteProduct}
+        isLoading={isDeleting}
+      />
     </div>
   )
 }

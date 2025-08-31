@@ -1,6 +1,6 @@
 # 📦 Staff Product Rental Tracker
 
-Full-stack web application for managing staff product rentals in retail environments. Built with React, TypeScript, and Firebase, featuring real-time data synchronization, user authentication, and automated CI/CD deployment.
+A modern, full-stack web application for managing staff product rentals in retail environments. Built with React 19, TypeScript, and Firebase, featuring real-time data synchronization, user authentication, and automated CI/CD deployment.
 
 
 ## 🌟 Features
@@ -70,28 +70,41 @@ Full-stack web application for managing staff product rentals in retail environm
 ### Prerequisites
 - Node.js 20+
 - npm or yarn
-- Firebase account
+- Firebase account (optional for local development)
 - Git
-
-## 🚀 Getting Started
 
 ### Quick Start
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/your-username/Staff_Rental.git
 cd Staff_Rental
 
 # Install dependencies
 npm install
 
-# Start development server
+# Start development server (uses real Firebase)
 npm run dev
+```
+
+### Firebase Setup (Optional)
+If you want to use your own Firebase project:
+
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Enable Firestore Database and Authentication
+3. Copy your Firebase config and create `.env` file:
+```bash
+VITE_FB_API_KEY=your_api_key_here
+VITE_FB_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FB_PROJECT_ID=your_project_id
+VITE_FB_STORAGE_BUCKET=your_project.appspot.com
+VITE_FB_MESSAGING_SENDER_ID=123456789
+VITE_FB_APP_ID=1:123456789:web:abcdef
 ```
 
 ### Development Commands
 ```bash
-# Run the application
-npm run dev                 # Start development server
+# Development
+npm run dev                 # Start development server with hot reload
 
 # Code Quality
 npm run lint               # Run ESLint for code quality
@@ -104,10 +117,8 @@ npm run test:ui           # Run tests with UI dashboard
 
 # Build & Deploy
 npm run build             # Build for production
-npm run preview           # Preview production build
+npm run preview           # Preview production build locally
 ```
-
-
 
 
 ## 🔧 Key Features Implementation
@@ -143,9 +154,13 @@ npm run preview           # Preview production build
 ## ⚖️ Pros & Cons
 
 ### Pros
+- **Modern Tech Stack** - React 19, TypeScript, Tailwind CSS v4, latest tooling
+- **Real-time Sync** - Instant data updates across all users with Firebase
 - **Type Safety** - Full TypeScript coverage prevents runtime errors
+- **Responsive Design** - Works seamlessly on desktop, tablet, and mobile
+- **Authentication** - Secure user management with role-based access
 - **Test Coverage** - 62 comprehensive test cases ensure reliability
-- **CI/CD Ready** - Automated deployment with GitHub Actions
+- **CI/CD** - Automated deployment with GitHub Actions
 - **Developer Experience** - Hot reload, ESLint, and modern tooling
 - **Scalable Architecture** - Clean separation of concerns and modular design
 - **Production Ready** - Live deployment with global CDN
@@ -153,6 +168,14 @@ npm run preview           # Preview production build
 ### Cons
 - **Firebase Dependency** - Locked into Google's ecosystem
 - **Bundle Size** - Large initial bundle (~935KB) due to Firebase SDK
+- **Offline Limitations** - Limited offline functionality
 - **Cost Scaling** - Firebase costs can increase with heavy usage
-- **Mobile App** - Web-only solution, no native mobile apps
-- **Advanced Features** - Missing some enterprise features (bulk operations, advanced reporting)
+- **Missing Advanced Features** - No bulk operations or advanced reporting yet
+
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Firebase](https://firebase.google.com/) for the backend infrastructure
+- [Tailwind CSS](https://tailwindcss.com/) for the styling system
+- [React Testing Library](https://testing-library.com/) for testing utilities
