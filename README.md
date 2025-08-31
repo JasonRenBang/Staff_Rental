@@ -56,6 +56,8 @@ npm run lint --fix         # Auto-fix ESLint issues
 npm test                   # Run tests in watch mode
 npm run test:run          # Run tests once (CI mode)
 npm run test:ui           # Run tests with UI dashboard
+# All unit tests are located in src/__tests__/ directory
+# Test coverage includes: components, API functions, stores, and utilities
 
 # Build & Deploy
 npm run build             # Build for production
