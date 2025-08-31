@@ -32,7 +32,6 @@ Object.defineProperty(import.meta, 'env', {
     VITE_FB_STORAGE_BUCKET: 'test-project.appspot.com',
     VITE_FB_MESSAGING_SENDER_ID: '123456789',
     VITE_FB_APP_ID: '1:123456789:web:abcdef',
-    VITE_USE_EMU: '1',
   },
 })
 

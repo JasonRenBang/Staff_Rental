@@ -22,3 +22,21 @@ service cloud.firestore {
     }
   }
 }
+
+    }
+    
+    // Rentals collection - require authentication
+    match /rentals/{rentalId} {
+      allow read, create, update: if isAuthenticated();
+      allow delete: if false; // Prevent accidental deletion of rental history
+    }
+    
+    // Serial Number index - require authentication
+    match /serial_index/{serialNumber} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && !exists(/databases/$(database)/documents/serial_index/$(serialNumber));
+      allow update: if false; // Serial numbers should not be updated directly
+      allow delete: if isAuthenticated(); // Allow deletion when product is deleted
+    }
+  }
+}
