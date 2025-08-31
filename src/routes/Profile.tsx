@@ -19,7 +19,7 @@ export default function Profile() {
     setIsLoading(true)
     try {
       await updateUserProfile(user.uid, data)
-      
+
       // Update local store
       if (userProfile) {
         setUserProfile({
@@ -28,7 +28,7 @@ export default function Profile() {
           updatedAt: new Date(),
         })
       }
-      
+
       toast.success('Profile updated successfully!')
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to update profile')
@@ -71,11 +71,7 @@ export default function Profile() {
         <AccountInfoCard userProfile={userProfile} />
 
         {/* Edit Profile Form */}
-        <ProfileEditForm 
-          userProfile={userProfile}
-          onSubmit={onSubmit}
-          isLoading={isLoading}
-        />
+        <ProfileEditForm userProfile={userProfile} onSubmit={onSubmit} isLoading={isLoading} />
       </div>
     </div>
   )

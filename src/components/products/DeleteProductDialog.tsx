@@ -15,7 +15,7 @@ export default function DeleteProductDialog({
   onOpenChange,
   product,
   onConfirm,
-  isLoading = false
+  isLoading = false,
 }: DeleteProductDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -32,22 +32,12 @@ export default function DeleteProductDialog({
               <p className="text-sm text-muted-foreground">Serial: {product.serialNumber}</p>
             </div>
           )}
-          <p className="text-sm text-destructive">
-            This action cannot be undone.
-          </p>
+          <p className="text-sm text-destructive">This action cannot be undone.</p>
           <div className="flex justify-end space-x-2">
-            <Button 
-              variant="outline" 
-              onClick={() => onOpenChange(false)}
-              disabled={isLoading}
-            >
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isLoading}>
               Cancel
             </Button>
-            <Button 
-              variant="destructive" 
-              onClick={onConfirm}
-              disabled={isLoading}
-            >
+            <Button variant="destructive" onClick={onConfirm} disabled={isLoading}>
               {isLoading ? 'Deleting...' : 'Delete Product'}
             </Button>
           </div>

@@ -4,7 +4,14 @@ import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import type { UserProfile } from '@/types/user'
 
 const profileSchema = z.object({
@@ -21,7 +28,11 @@ interface ProfileEditFormProps {
   isLoading: boolean
 }
 
-export default function ProfileEditForm({ userProfile, onSubmit, isLoading }: ProfileEditFormProps) {
+export default function ProfileEditForm({
+  userProfile,
+  onSubmit,
+  isLoading,
+}: ProfileEditFormProps) {
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {

@@ -17,9 +17,9 @@ function App() {
 
   // Initialize auth state
   useEffect(() => {
-    const unsubscribe = subscribeToAuthState(async (user) => {
+    const unsubscribe = subscribeToAuthState(async user => {
       setUser(user)
-      
+
       if (user) {
         // Load user profile
         try {
@@ -31,7 +31,7 @@ function App() {
       } else {
         setUserProfile(null)
       }
-      
+
       setLoading(false)
     })
 
@@ -42,38 +42,53 @@ function App() {
     <Router>
       <div className="min-h-screen bg-background">
         {isAuthenticated && <Navigation />}
-        <main className={isAuthenticated ? "container mx-auto px-4 py-6" : ""}>
+        <main className={isAuthenticated ? 'container mx-auto px-4 py-6' : ''}>
           <Routes>
             {/* Public routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
+
             {/* Protected routes */}
-            <Route path="/" element={
-              <ProtectedRoute>
-                <Navigate to="/products" replace />
-              </ProtectedRoute>
-            } />
-            <Route path="/products" element={
-              <ProtectedRoute>
-                <Products />
-              </ProtectedRoute>
-            } />
-            <Route path="/book" element={
-              <ProtectedRoute>
-                <Book />
-              </ProtectedRoute>
-            } />
-            <Route path="/rentals" element={
-              <ProtectedRoute>
-                <Rentals />
-              </ProtectedRoute>
-            } />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            } />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Navigate to="/products" replace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoute>
+                  <Products />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/book"
+              element={
+                <ProtectedRoute>
+                  <Book />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rentals"
+              element={
+                <ProtectedRoute>
+                  <Rentals />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <Toaster />

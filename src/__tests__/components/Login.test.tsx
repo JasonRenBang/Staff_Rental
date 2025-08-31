@@ -40,7 +40,7 @@ describe('Login', () => {
 
   it('should render login form', () => {
     renderLogin()
-    
+
     // Use getAllByText to get the first occurrence (title), not getByRole
     expect(screen.getAllByText('Sign In')[0]).toBeInTheDocument()
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
@@ -52,10 +52,10 @@ describe('Login', () => {
   it('should show validation errors for invalid input', async () => {
     const user = userEvent.setup()
     renderLogin()
-    
+
     const submitButton = screen.getByRole('button', { name: /sign in/i })
     await user.click(submitButton)
-    
+
     await waitFor(() => {
       expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument()
       expect(screen.getByText(/password must be at least 6 characters/i)).toBeInTheDocument()
@@ -66,15 +66,15 @@ describe('Login', () => {
     const { signIn } = await import('@/lib/authApi')
     const mockSignIn = vi.mocked(signIn)
     const user = userEvent.setup()
-    
+
     mockSignIn.mockResolvedValue({} as any)
-    
+
     renderLogin()
-    
+
     await user.type(screen.getByLabelText(/email/i), 'test@example.com')
     await user.type(screen.getByLabelText(/password/i), 'password123')
     await user.click(screen.getByRole('button', { name: /sign in/i }))
-    
+
     await waitFor(() => {
       expect(mockSignIn).toHaveBeenCalledWith({
         email: 'test@example.com',
@@ -89,19 +89,17 @@ describe('Login', () => {
     const mockSignIn = vi.mocked(signIn)
     const mockToast = vi.mocked(toast)
     const user = userEvent.setup()
-    
+
     mockSignIn.mockRejectedValue(new Error('Invalid credentials'))
-    
+
     renderLogin()
-    
+
     await user.type(screen.getByLabelText(/email/i), 'test@example.com')
     await user.type(screen.getByLabelText(/password/i), 'wrongpassword')
     await user.click(screen.getByRole('button', { name: /sign in/i }))
-    
+
     await waitFor(() => {
       expect(mockToast.error).toHaveBeenCalledWith('Invalid credentials')
     })
   })
 })
-
-

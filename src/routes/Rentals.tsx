@@ -1,7 +1,14 @@
 import { useState, useEffect } from 'react'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import type { Rental } from '@/types/rental'
 import { subscribeToOpenRentals, subscribeToClosedRentals } from '@/lib/rentalApi'
 import { formatDate, isOverdue, isDueSoon } from '@/utils/dates'
@@ -12,7 +19,7 @@ export default function Rentals() {
 
   // Subscribe to open rentals
   useEffect(() => {
-    const unsubscribe = subscribeToOpenRentals((rentals) => {
+    const unsubscribe = subscribeToOpenRentals(rentals => {
       setOpenRentals(rentals)
     })
     return unsubscribe
@@ -20,13 +27,11 @@ export default function Rentals() {
 
   // Subscribe to closed rentals
   useEffect(() => {
-    const unsubscribe = subscribeToClosedRentals((rentals) => {
+    const unsubscribe = subscribeToClosedRentals(rentals => {
       setClosedRentals(rentals)
     })
     return unsubscribe
   }, [])
-
-
 
   // Get due status badge
   const getDueBadgeVariant = (dueDate: string) => {
@@ -47,12 +52,8 @@ export default function Rentals() {
 
       <Tabs defaultValue="current" className="w-full">
         <TabsList>
-          <TabsTrigger value="current">
-            Current Rentals ({openRentals.length})
-          </TabsTrigger>
-          <TabsTrigger value="history">
-            Rental History ({closedRentals.length})
-          </TabsTrigger>
+          <TabsTrigger value="current">Current Rentals ({openRentals.length})</TabsTrigger>
+          <TabsTrigger value="history">Rental History ({closedRentals.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="current" className="mt-6">
@@ -76,7 +77,7 @@ export default function Rentals() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  openRentals.map((rental) => (
+                  openRentals.map(rental => (
                     <TableRow key={rental.id}>
                       <TableCell>
                         <div>
@@ -125,7 +126,7 @@ export default function Rentals() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  closedRentals.map((rental) => (
+                  closedRentals.map(rental => (
                     <TableRow key={rental.id}>
                       <TableCell>
                         <div>
@@ -141,12 +142,12 @@ export default function Rentals() {
                       <TableCell>{rental.staffName}</TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <div>{formatDate(rental.rentalDate)} - {formatDate(rental.dueDate)}</div>
+                          <div>
+                            {formatDate(rental.rentalDate)} - {formatDate(rental.dueDate)}
+                          </div>
                         </div>
                       </TableCell>
-                      <TableCell>
-                        {rental.returnDate && formatDate(rental.returnDate)}
-                      </TableCell>
+                      <TableCell>{rental.returnDate && formatDate(rental.returnDate)}</TableCell>
                     </TableRow>
                   ))
                 )}

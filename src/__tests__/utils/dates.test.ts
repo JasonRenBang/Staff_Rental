@@ -14,7 +14,7 @@ describe('Date Utils', () => {
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
       const yesterdayStr = yesterday.toISOString().split('T')[0]
-      
+
       expect(isOverdue(yesterdayStr)).toBe(true)
     })
 
@@ -22,7 +22,7 @@ describe('Date Utils', () => {
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
       const tomorrowStr = tomorrow.toISOString().split('T')[0]
-      
+
       expect(isOverdue(tomorrowStr)).toBe(false)
     })
   })
@@ -32,7 +32,7 @@ describe('Date Utils', () => {
       const tomorrow = new Date()
       tomorrow.setDate(tomorrow.getDate() + 1)
       const tomorrowStr = tomorrow.toISOString().split('T')[0]
-      
+
       expect(isDueSoon(tomorrowStr)).toBe(true)
     })
   })

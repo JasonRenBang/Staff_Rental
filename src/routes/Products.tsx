@@ -2,8 +2,20 @@ import { useState, useEffect } from 'react'
 import { Plus } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import type { Product } from '@/types/product'
 import { subscribeToProducts, deleteProduct } from '@/lib/productApi'
 import { checkInProduct } from '@/lib/rentalApi'
@@ -21,18 +33,18 @@ export default function Products() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [productToDelete, setProductToDelete] = useState<Product | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
-  const { 
-    filterStatus, 
-    setFilterStatus, 
-    isCreateProductOpen, 
+  const {
+    filterStatus,
+    setFilterStatus,
+    isCreateProductOpen,
     setCreateProductOpen,
     lastActionProductId,
-    setLastActionProductId 
+    setLastActionProductId,
   } = useUiStore()
 
   // Subscribe to products
   useEffect(() => {
-    const unsubscribe = subscribeToProducts((newProducts) => {
+    const unsubscribe = subscribeToProducts(newProducts => {
       setProducts(newProducts)
     })
     return unsubscribe
@@ -75,7 +87,7 @@ export default function Products() {
   // Confirm delete product
   const confirmDeleteProduct = async () => {
     if (!productToDelete) return
-    
+
     setIsDeleting(true)
     try {
       await deleteProduct(productToDelete.id, productToDelete.serialNumber)
@@ -111,7 +123,10 @@ export default function Products() {
 
       {/* Filter */}
       <div className="mb-4">
-        <Select value={filterStatus} onValueChange={(value: 'All' | 'Available' | 'Rented') => setFilterStatus(value)}>
+        <Select
+          value={filterStatus}
+          onValueChange={(value: 'All' | 'Available' | 'Rented') => setFilterStatus(value)}
+        >
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
@@ -140,7 +155,7 @@ export default function Products() {
             <DialogTitle>Edit Product</DialogTitle>
           </DialogHeader>
           {editingProduct && (
-            <CreateProductForm 
+            <CreateProductForm
               editingProduct={editingProduct}
               onSuccess={() => {
                 setIsEditDialogOpen(false)

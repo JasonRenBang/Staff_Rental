@@ -14,18 +14,23 @@ import { formatDateForInput, getCurrentDate } from '@/utils/dates'
 import ProductSelector from '@/components/booking/ProductSelector'
 import BookingFormFields from '@/components/booking/BookingFormFields'
 
-const bookOutSchema = z.object({
-  productId: z.string().min(1, 'Please select a product'),
-  staffName: z.string().min(1, 'Staff name is required').max(100, 'Name too long'),
-  rentalDate: z.string().min(1, 'Rental date is required'),
-  dueDate: z.string().min(1, 'Due date is required'),
-  storeLocation: z.string().min(1, 'Store location is required')
-}).refine((data) => {
-  return new Date(data.dueDate) >= new Date(data.rentalDate)
-}, {
-  message: "Due date must be on or after rental date",
-  path: ["dueDate"]
-})
+const bookOutSchema = z
+  .object({
+    productId: z.string().min(1, 'Please select a product'),
+    staffName: z.string().min(1, 'Staff name is required').max(100, 'Name too long'),
+    rentalDate: z.string().min(1, 'Rental date is required'),
+    dueDate: z.string().min(1, 'Due date is required'),
+    storeLocation: z.string().min(1, 'Store location is required'),
+  })
+  .refine(
+    data => {
+      return new Date(data.dueDate) >= new Date(data.rentalDate)
+    },
+    {
+      message: 'Due date must be on or after rental date',
+      path: ['dueDate'],
+    }
+  )
 
 type BookOutForm = z.infer<typeof bookOutSchema>
 
@@ -34,7 +39,7 @@ export default function Book() {
   const [searchParams] = useSearchParams()
   const [allProducts, setAllProducts] = useState<Product[]>([])
   const { defaultStoreLocation, setLastActionProductId } = useUiStore()
-  
+
   const preselectedProductId = searchParams.get('productId')
   const [preselectedProduct, setPreselectedProduct] = useState<Product | null>(null)
 
@@ -46,10 +51,10 @@ export default function Book() {
   } = useForm<BookOutForm>({
     resolver: zodResolver(bookOutSchema),
     defaultValues: {
-      productId: '',  
+      productId: '',
       rentalDate: formatDateForInput(getCurrentDate()),
-      storeLocation: defaultStoreLocation
-    }
+      storeLocation: defaultStoreLocation,
+    },
   })
 
   // Watch form values
@@ -61,7 +66,7 @@ export default function Book() {
 
   // Subscribe to all available products
   useEffect(() => {
-    const unsubscribe = subscribeToProducts((products) => {
+    const unsubscribe = subscribeToProducts(products => {
       const available = products.filter(p => p.status === 'Available')
       setAllProducts(available)
 
@@ -106,15 +111,14 @@ export default function Book() {
       <div className="flex justify-center">
         <div className="w-full max-w-md">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            
             {/* Product Selection */}
             <ProductSelector
               storeLocation={selectedStoreLocation}
               productId={selectedProductId}
               products={allProducts}
               preselectedProduct={preselectedProduct}
-              onStoreLocationChange={(value) => setValue('storeLocation', value)}
-              onProductChange={(value) => setValue('productId', value)}
+              onStoreLocationChange={value => setValue('storeLocation', value)}
+              onProductChange={value => setValue('productId', value)}
               error={errors.productId?.message}
             />
 
@@ -123,22 +127,18 @@ export default function Book() {
               staffName={staffName}
               rentalDate={rentalDate}
               dueDate={dueDate}
-              onStaffNameChange={(value) => setValue('staffName', value)}
-              onRentalDateChange={(value) => setValue('rentalDate', value)}
-              onDueDateChange={(value) => setValue('dueDate', value)}
+              onStaffNameChange={value => setValue('staffName', value)}
+              onRentalDateChange={value => setValue('rentalDate', value)}
+              onDueDateChange={value => setValue('dueDate', value)}
               errors={{
                 staffName: errors.staffName?.message,
                 rentalDate: errors.rentalDate?.message,
-                dueDate: errors.dueDate?.message
+                dueDate: errors.dueDate?.message,
               }}
             />
 
             <div className="flex justify-end space-x-2 pt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={() => navigate('/products')}
-              >
+              <Button type="button" variant="outline" onClick={() => navigate('/products')}>
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>

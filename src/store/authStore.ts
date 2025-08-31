@@ -13,25 +13,27 @@ interface AuthState {
   clearAuth: () => void
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>(set => ({
   user: null,
   userProfile: null,
   isLoading: true,
   isAuthenticated: false,
-  
-  setUser: (user) => set({ 
-    user, 
-    isAuthenticated: !!user 
-  }),
-  
-  setUserProfile: (userProfile) => set({ userProfile }),
-  
-  setLoading: (isLoading) => set({ isLoading }),
-  
-  clearAuth: () => set({ 
-    user: null, 
-    userProfile: null, 
-    isAuthenticated: false,
-    isLoading: false 
-  }),
+
+  setUser: user =>
+    set({
+      user,
+      isAuthenticated: !!user,
+    }),
+
+  setUserProfile: userProfile => set({ userProfile }),
+
+  setLoading: isLoading => set({ isLoading }),
+
+  clearAuth: () =>
+    set({
+      user: null,
+      userProfile: null,
+      isAuthenticated: false,
+      isLoading: false,
+    }),
 }))

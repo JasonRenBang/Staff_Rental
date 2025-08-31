@@ -33,7 +33,7 @@ describe('ProtectedRoute', () => {
     })
 
     renderProtectedRoute()
-    
+
     expect(screen.getByText('Loading...')).toBeInTheDocument()
   })
 
@@ -50,7 +50,7 @@ describe('ProtectedRoute', () => {
     })
 
     renderProtectedRoute(<div>Protected Content</div>)
-    
+
     expect(screen.getByText('Protected Content')).toBeInTheDocument()
   })
 
@@ -67,7 +67,7 @@ describe('ProtectedRoute', () => {
     })
 
     renderProtectedRoute()
-    
+
     expect(screen.queryByText('Protected Content')).not.toBeInTheDocument()
   })
 })

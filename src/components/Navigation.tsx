@@ -17,7 +17,7 @@ import { toast } from 'sonner'
 export default function Navigation() {
   const location = useLocation()
   const { userProfile } = useAuthStore()
-  
+
   const navItems = [
     { path: '/products', label: 'Products', icon: Package },
     { path: '/book', label: 'Book Out', icon: UserPlus },
@@ -32,7 +32,7 @@ export default function Navigation() {
       toast.error('Failed to sign out')
     }
   }
-  
+
   return (
     <nav className="border-b bg-card">
       <div className="container mx-auto px-4">
@@ -41,7 +41,7 @@ export default function Navigation() {
             <Package className="h-6 w-6 text-primary" />
             <h1 className="text-xl font-bold">Staff Rental Tracker</h1>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             {/* Navigation Items */}
             <div className="flex space-x-2">
@@ -67,7 +67,10 @@ export default function Navigation() {
                   <Button variant="ghost" size="sm" className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
                     <span>{userProfile.displayName}</span>
-                    <Badge variant={userProfile.role === 'admin' ? 'default' : 'secondary'} className="text-xs">
+                    <Badge
+                      variant={userProfile.role === 'admin' ? 'default' : 'secondary'}
+                      className="text-xs"
+                    >
                       {userProfile.role}
                     </Badge>
                   </Button>

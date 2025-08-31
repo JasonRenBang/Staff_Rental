@@ -51,18 +51,18 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     expect(screen.getByText('Staff Rental Tracker')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /products/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /book out/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /rentals/i })).toBeInTheDocument()
-    
+
     // User menu should not be present
     expect(screen.queryByText('Test User')).not.toBeInTheDocument()
   })
@@ -88,13 +88,13 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     expect(screen.getByText('Test User')).toBeInTheDocument()
     expect(screen.getByText('staff')).toBeInTheDocument()
   })
@@ -119,13 +119,13 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     expect(screen.getByText('Admin User')).toBeInTheDocument()
     expect(screen.getByText('admin')).toBeInTheDocument()
   })
@@ -158,26 +158,26 @@ describe('Navigation', () => {
     })
 
     mockSignOut.mockResolvedValue(undefined)
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     // Click on user menu trigger
     const userMenuTrigger = screen.getByText('Test User')
     await user.click(userMenuTrigger)
-    
+
     // Wait for dropdown to appear and click sign out
     await waitFor(() => {
       const signOutButton = screen.getByText('Sign Out')
       expect(signOutButton).toBeInTheDocument()
     })
-    
+
     const signOutButton = screen.getByText('Sign Out')
     await user.click(signOutButton)
-    
+
     await waitFor(() => {
       expect(mockSignOut).toHaveBeenCalled()
       expect(mockToast.success).toHaveBeenCalledWith('Signed out successfully')
@@ -195,20 +195,20 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     const productsLink = screen.getByRole('link', { name: /products/i })
     const bookLink = screen.getByRole('link', { name: /book out/i })
     const rentalsLink = screen.getByRole('link', { name: /rentals/i })
-    
+
     // Products should be active (has bg-primary class)
     expect(productsLink).toHaveClass('bg-primary')
-    
+
     // Others should be inactive (no bg-primary class)
     expect(bookLink).not.toHaveClass('bg-primary')
     expect(rentalsLink).not.toHaveClass('bg-primary')
@@ -225,13 +225,13 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     // Check for SVG icons (lucide-react icons render as SVGs)
     const container = screen.getByRole('navigation')
     const svgs = container.querySelectorAll('svg')
@@ -249,13 +249,13 @@ describe('Navigation', () => {
       setLoading: vi.fn(),
       clearAuth: vi.fn(),
     })
-    
+
     render(
       <NavigationWrapper>
         <Navigation />
       </NavigationWrapper>
     )
-    
+
     expect(screen.getByRole('link', { name: /products/i })).toHaveAttribute('href', '/products')
     expect(screen.getByRole('link', { name: /book out/i })).toHaveAttribute('href', '/book')
     expect(screen.getByRole('link', { name: /rentals/i })).toHaveAttribute('href', '/rentals')

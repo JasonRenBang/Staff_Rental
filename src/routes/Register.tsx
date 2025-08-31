@@ -7,8 +7,16 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { register } from '@/lib/authApi'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { register, getUserProfile } from '@/lib/authApi'
+import { useAuthStore } from '@/store/authStore'
 import type { RegisterInput } from '@/types/user'
 
 const registerSchema = z.object({
@@ -22,6 +30,7 @@ const registerSchema = z.object({
 export default function Register() {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const { setUserProfile } = useAuthStore()
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -37,7 +46,16 @@ export default function Register() {
   const onSubmit = async (data: RegisterInput) => {
     setIsLoading(true)
     try {
-      await register(data)
+      const user = await register(data)
+
+      // immediately load user profile to state
+      try {
+        const profile = await getUserProfile(user.uid)
+        setUserProfile(profile)
+      } catch (profileError) {
+        console.error('Failed to load user profile after registration:', profileError)
+      }
+
       toast.success('Account created successfully!')
       navigate('/')
     } catch (error) {
@@ -66,17 +84,13 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter your email" 
-                        type="email"
-                        {...field} 
-                      />
+                      <Input placeholder="Enter your email" type="email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="password"
@@ -84,11 +98,7 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter your password" 
-                        type="password"
-                        {...field} 
-                      />
+                      <Input placeholder="Enter your password" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -102,10 +112,7 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Display Name</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter your full name" 
-                        {...field} 
-                      />
+                      <Input placeholder="Enter your full name" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -119,10 +126,7 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Department (Optional)</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="e.g. IT, Sales, Marketing" 
-                        {...field} 
-                      />
+                      <Input placeholder="e.g. IT, Sales, Marketing" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -136,22 +140,14 @@ export default function Register() {
                   <FormItem>
                     <FormLabel>Phone (Optional)</FormLabel>
                     <FormControl>
-                      <Input 
-                        placeholder="Enter your phone number" 
-                        type="tel"
-                        {...field} 
-                      />
+                      <Input placeholder="Enter your phone number" type="tel" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button 
-                type="submit" 
-                className="w-full"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>

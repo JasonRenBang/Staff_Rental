@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { createProduct, updateProduct, deleteProduct } from '@/lib/productApi'
 import type { CreateProductInput } from '@/types/product'
@@ -33,7 +32,7 @@ describe('Product API', () => {
     sku: 'TEST123',
     description: 'Test Description',
     serialNumber: 'TEST001',
-    storeLocation: 'CAR'
+    storeLocation: 'CAR',
   }
 
   beforeEach(() => {
@@ -44,14 +43,14 @@ describe('Product API', () => {
     it('should create product successfully', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => false }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) =>
         callback(mockTransaction).then(() => 'test-product-id')
       )
 
@@ -63,16 +62,14 @@ describe('Product API', () => {
     it('should throw error for duplicate serial number', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => true }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await expect(createProduct(mockProductInput)).rejects.toThrow('Serial Number already exists')
     })
@@ -82,16 +79,14 @@ describe('Product API', () => {
     it('should update product with same serial number', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn(),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await updateProduct('test-id', mockProductInput, 'TEST001')
       expect(mockTransaction.update).toHaveBeenCalledTimes(1) // only product update
@@ -100,20 +95,18 @@ describe('Product API', () => {
     it('should update product with new serial number', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => false }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       const updatedInput = { ...mockProductInput, serialNumber: 'TEST002' }
       await updateProduct('test-id', updatedInput, 'TEST001')
-      
+
       expect(mockTransaction.delete).toHaveBeenCalledTimes(1) // old serial index
       expect(mockTransaction.set).toHaveBeenCalledTimes(1) // new serial index
       expect(mockTransaction.update).toHaveBeenCalledTimes(1) // product
@@ -122,19 +115,19 @@ describe('Product API', () => {
     it('should throw error for duplicate new serial number', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({ exists: () => true }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       const updatedInput = { ...mockProductInput, serialNumber: 'DUPLICATE' }
-      await expect(updateProduct('test-id', updatedInput, 'TEST001')).rejects.toThrow('Serial Number already exists')
+      await expect(updateProduct('test-id', updatedInput, 'TEST001')).rejects.toThrow(
+        'Serial Number already exists'
+      )
     })
   })
 
@@ -142,16 +135,14 @@ describe('Product API', () => {
     it('should delete product and serial index', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn(),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await deleteProduct('test-id', 'TEST001')
       expect(mockTransaction.delete).toHaveBeenCalledTimes(2) // serial index + product

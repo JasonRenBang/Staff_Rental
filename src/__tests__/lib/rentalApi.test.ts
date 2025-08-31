@@ -32,7 +32,7 @@ describe('Rental API', () => {
     staffName: 'John Doe',
     rentalDate: '2025-08-30',
     dueDate: '2025-09-05',
-    storeLocation: 'CAR'
+    storeLocation: 'CAR',
   }
 
   beforeEach(() => {
@@ -43,23 +43,23 @@ describe('Rental API', () => {
     it('should book out available product', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
           exists: () => true,
-          data: () => ({ 
-            status: 'Available', 
-            name: 'Test Product', 
-            sku: 'TEST123', 
-            serialNumber: 'TEST001', 
-            storeLocation: 'CAR' 
-          })
+          data: () => ({
+            status: 'Available',
+            name: 'Test Product',
+            sku: 'TEST123',
+            serialNumber: 'TEST001',
+            storeLocation: 'CAR',
+          }),
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
+      mockRunTransaction.mockImplementation((_db, callback) =>
         callback(mockTransaction).then(() => 'test-rental-id')
       )
 
@@ -72,18 +72,16 @@ describe('Rental API', () => {
     it('should throw error for non-existent product', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
-          exists: () => false
+          exists: () => false,
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await expect(bookOutProduct(mockRentalInput)).rejects.toThrow('Product not found')
     })
@@ -91,21 +89,21 @@ describe('Rental API', () => {
     it('should throw error for unavailable product', async () => {
       const { runTransaction } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
           exists: () => true,
-          data: () => ({ status: 'Rented' })
+          data: () => ({ status: 'Rented' }),
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
-      await expect(bookOutProduct(mockRentalInput)).rejects.toThrow('Product is not available for rental')
+      await expect(bookOutProduct(mockRentalInput)).rejects.toThrow(
+        'Product is not available for rental'
+      )
     })
   })
 
@@ -114,25 +112,23 @@ describe('Rental API', () => {
       const { runTransaction, getDocs } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
       const mockGetDocs = vi.mocked(getDocs)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
           exists: () => true,
-          data: () => ({ status: 'Rented' })
+          data: () => ({ status: 'Rented' }),
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      
+
       mockGetDocs.mockResolvedValue({
         empty: false,
-        docs: [{ id: 'rental-id', ref: {} }]
+        docs: [{ id: 'rental-id', ref: {} }],
       } as any)
-      
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await checkInProduct('test-product-id')
       expect(mockTransaction.update).toHaveBeenCalledTimes(2) // rental + product
@@ -142,25 +138,23 @@ describe('Rental API', () => {
       const { runTransaction, getDocs } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
       const mockGetDocs = vi.mocked(getDocs)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
           exists: () => true,
-          data: () => ({ status: 'Rented' })
+          data: () => ({ status: 'Rented' }),
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      
+
       mockGetDocs.mockResolvedValue({
         empty: true,
-        docs: []
+        docs: [],
       } as any)
-      
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await checkInProduct('test-product-id')
       expect(mockTransaction.update).toHaveBeenCalledTimes(1) // only product
@@ -170,24 +164,22 @@ describe('Rental API', () => {
       const { runTransaction, getDocs } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
       const mockGetDocs = vi.mocked(getDocs)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
-          exists: () => false
+          exists: () => false,
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      
+
       mockGetDocs.mockResolvedValue({
         empty: true,
-        docs: []
+        docs: [],
       } as any)
-      
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
+
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
 
       await expect(checkInProduct('test-product-id')).rejects.toThrow('Product not found')
     })
@@ -196,27 +188,27 @@ describe('Rental API', () => {
       const { runTransaction, getDocs } = await import('firebase/firestore')
       const mockRunTransaction = vi.mocked(runTransaction)
       const mockGetDocs = vi.mocked(getDocs)
-      
+
       const mockTransaction = {
         get: vi.fn().mockResolvedValue({
           exists: () => true,
-          data: () => ({ status: 'Available' })
+          data: () => ({ status: 'Available' }),
         }),
         set: vi.fn(),
         update: vi.fn(),
         delete: vi.fn(),
       }
-      
+
       mockGetDocs.mockResolvedValue({
         empty: true,
-        docs: []
+        docs: [],
       } as any)
-      
-      mockRunTransaction.mockImplementation((_db, callback) => 
-        callback(mockTransaction)
-      )
 
-      await expect(checkInProduct('test-product-id')).rejects.toThrow('Product is not currently rented')
+      mockRunTransaction.mockImplementation((_db, callback) => callback(mockTransaction))
+
+      await expect(checkInProduct('test-product-id')).rejects.toThrow(
+        'Product is not currently rented'
+      )
     })
   })
 })

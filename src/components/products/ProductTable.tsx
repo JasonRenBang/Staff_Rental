@@ -1,7 +1,14 @@
 import { Edit, Trash2, UserPlus, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import type { Product } from '@/types/product'
 import { formatDate, isOverdue, isDueSoon } from '@/utils/dates'
 
@@ -20,7 +27,7 @@ export default function ProductTable({
   onCheckIn,
   onBookOut,
   onEdit,
-  onDelete
+  onDelete,
 }: ProductTableProps) {
   // Get status badge variant
   const getStatusBadgeVariant = (product: Product) => {
@@ -52,8 +59,8 @@ export default function ProductTable({
               </TableCell>
             </TableRow>
           ) : (
-            products.map((product) => (
-              <TableRow 
+            products.map(product => (
+              <TableRow
                 key={product.id}
                 className={lastActionProductId === product.id ? 'bg-accent' : ''}
               >
@@ -62,9 +69,7 @@ export default function ProductTable({
                 <TableCell>{product.sku}</TableCell>
                 <TableCell>{product.storeLocation}</TableCell>
                 <TableCell>
-                  <Badge variant={getStatusBadgeVariant(product)}>
-                    {product.status}
-                  </Badge>
+                  <Badge variant={getStatusBadgeVariant(product)}>{product.status}</Badge>
                 </TableCell>
                 <TableCell>
                   {product.status === 'Rented' && product.currentRenterName && (
@@ -80,19 +85,11 @@ export default function ProductTable({
                   <div className="flex space-x-2">
                     {product.status === 'Available' ? (
                       <>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onBookOut(product.id)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => onBookOut(product.id)}>
                           <UserPlus className="h-4 w-4 mr-1" />
                           Book Out
                         </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onEdit(product)}
-                        >
+                        <Button size="sm" variant="outline" onClick={() => onEdit(product)}>
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
@@ -105,11 +102,7 @@ export default function ProductTable({
                         </Button>
                       </>
                     ) : (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => onCheckIn(product.id)}
-                      >
+                      <Button size="sm" variant="outline" onClick={() => onCheckIn(product.id)}>
                         <UserCheck className="h-4 w-4 mr-1" />
                         Check In
                       </Button>

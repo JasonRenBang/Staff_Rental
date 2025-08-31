@@ -1,5 +1,11 @@
 import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import type { Product } from '@/types/product'
 
 interface ProductSelectorProps {
@@ -19,16 +25,16 @@ export default function ProductSelector({
   preselectedProduct,
   onStoreLocationChange,
   onProductChange,
-  error
+  error,
 }: ProductSelectorProps) {
   // Filter products by selected store location and SKU (if from product page)
   const filteredProducts = products.filter(product => {
     if (product.storeLocation !== storeLocation) return false
-    
+
     if (preselectedProduct) {
       return product.sku === preselectedProduct.sku
     }
-    
+
     return true
   })
 
@@ -55,9 +61,15 @@ export default function ProductSelector({
         <div className="p-4 bg-muted rounded-lg">
           <h3 className="font-medium mb-2">Selected Product</h3>
           <div className="text-sm space-y-1">
-            <p><span className="font-medium">Name:</span> {preselectedProduct.name}</p>
-            <p><span className="font-medium">SKU:</span> {preselectedProduct.sku}</p>
-            <p><span className="font-medium">Store:</span> {preselectedProduct.storeLocation}</p>
+            <p>
+              <span className="font-medium">Name:</span> {preselectedProduct.name}
+            </p>
+            <p>
+              <span className="font-medium">SKU:</span> {preselectedProduct.sku}
+            </p>
+            <p>
+              <span className="font-medium">Store:</span> {preselectedProduct.storeLocation}
+            </p>
           </div>
           <p className="text-xs text-muted-foreground mt-2">
             Showing all products with SKU: {preselectedProduct.sku}
@@ -78,7 +90,7 @@ export default function ProductSelector({
                 No available products in {storeLocation}
               </div>
             ) : (
-              filteredProducts.map((product) => (
+              filteredProducts.map(product => (
                 <SelectItem key={product.id} value={product.id}>
                   {product.name} - {product.sku} (Serial: {product.serialNumber})
                 </SelectItem>

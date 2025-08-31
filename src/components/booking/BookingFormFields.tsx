@@ -22,7 +22,7 @@ export default function BookingFormFields({
   onStaffNameChange,
   onRentalDateChange,
   onDueDateChange,
-  errors = {}
+  errors = {},
 }: BookingFormFieldsProps) {
   return (
     <div className="space-y-4">
@@ -34,11 +34,9 @@ export default function BookingFormFields({
           type="text"
           placeholder="Enter staff member's name"
           value={staffName}
-          onChange={(e) => onStaffNameChange(e.target.value)}
+          onChange={e => onStaffNameChange(e.target.value)}
         />
-        {errors.staffName && (
-          <p className="text-sm text-destructive mt-1">{errors.staffName}</p>
-        )}
+        {errors.staffName && <p className="text-sm text-destructive mt-1">{errors.staffName}</p>}
       </div>
 
       {/* Rental Date */}
@@ -48,11 +46,9 @@ export default function BookingFormFields({
           id="rentalDate"
           type="date"
           value={rentalDate}
-          onChange={(e) => onRentalDateChange(e.target.value)}
+          onChange={e => onRentalDateChange(e.target.value)}
         />
-        {errors.rentalDate && (
-          <p className="text-sm text-destructive mt-1">{errors.rentalDate}</p>
-        )}
+        {errors.rentalDate && <p className="text-sm text-destructive mt-1">{errors.rentalDate}</p>}
       </div>
 
       {/* Due Date */}
@@ -62,11 +58,9 @@ export default function BookingFormFields({
           id="dueDate"
           type="date"
           value={dueDate}
-          onChange={(e) => onDueDateChange(e.target.value)}
+          onChange={e => onDueDateChange(e.target.value)}
         />
-        {errors.dueDate && (
-          <p className="text-sm text-destructive mt-1">{errors.dueDate}</p>
-        )}
+        {errors.dueDate && <p className="text-sm text-destructive mt-1">{errors.dueDate}</p>}
       </div>
     </div>
   )
